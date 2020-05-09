@@ -21,16 +21,16 @@ class Cliente
     $validadorCPF = new ValidadorCPF();
     $validadorCNPJ = new ValidadorCNPJ();
 
-    //Validação CEP
+    //Validação CEP chamando o método de validação de cep
     if(!$this->cepValido($cep)) throw new Exception("CEP no formato inválido!");
 
-    //Validação Telefone
+    //Validação Telefone chamando o método de validação de telefone
     if(!$this->telefoneValido($telefone)) throw new Exception("Telefone no formato inválido!");
 
-    //Validação email
+    //Validação e-mail chamando o método de validação de e-mail
     if(!$this->emailValido($email)) throw new Exception("Email no formato inválido!");
 
-    //Validação do cpf_cnpj
+    //Validação do cpf_cnpj chamando o método de validação de cpf_cnpj
     if(strlen($cpf_cnpj) >= 14)
     {
       if(!$validadorCNPJ->ehValido($cpf_cnpj)) throw new Exception("CNPJ no formato inválido!");
@@ -72,6 +72,9 @@ class Cliente
     if(strlen($telefone) == 15)
     {
       $regex_telefone = "/\([0-9]{2}\)[0-9]{5}\-[0-9]{4}/";
+
+      #O str_replace(" ", "", $telefone) está substituindo o espaço vazio entre
+      #o parêntesis e o início do número do telefone por espaço nenhum
       return preg_match($regex_telefone, str_replace(" ", "", $telefone));
     }  
       return false;

@@ -2,26 +2,20 @@
 
 class ValidadorCNPJ
 {
-
   #Método de validação
   public function ehValido($cnpj)
   {
-
-    #Se o método ehcpf($cnpj) não é um cpf com máscara,
-    #retorna um false
+    #Se o método ehcpf($cnpj) não é um cpf com máscara, retorna um false
     if (!ValidadorCNPJ::ehCNPJ($cnpj)) return false;
 
     #Retirando a máscara de cnpj
     $cnpj_numeros = ValidadorCNPJ::removeFormatacao($cnpj);
 
-    #Se o método verificaNumerosIguais($cnpj) possuir
-    #números iguais, retorna um false
-    #Para realizar esse verificação precisamos em 
-    #primeiro lugar retirar a máscara de cnpj
+    #Se o método verificaNumerosIguais($cnpj) possuir números iguais, retorna um false
+    #Para realizar esse verificação precisamos em primeiro lugar retirar a máscara de cnpj
     if (!ValidadorCNPJ::verificarNumerosIguais($cnpj_numeros)) return false;
 
-    #Se validarDigitos($cnpj_numeros) não possuir todos os dígitos
-    #do cnpj, retorna um false
+    #Se validarDigitos($cnpj_numeros) não possuir todos os dígitos do cnpj, retorna um false
     if (!ValidadorCNPJ::validarDigitos($cnpj_numeros)) return false;
 
     #Se nada retornar um false então está atendendo corretamente
@@ -36,25 +30,24 @@ class ValidadorCNPJ
     return preg_match($regex_cnpj, $cnpj);
   }
 
-  #Retirar a máscara de formatação para verificação de 
-  #números repetidos sequencialmente
+  #Retirar a máscara de formatação para verificação de números repetidos sequencialmente
   private function removeFormatacao($cnpj)
   {
     $somente_numeros = str_replace([".", "/", "-"], "", $cnpj);
     return $somente_numeros;
   }
 
-  #Procurar por sequências de números iguais no cnpj
-  #se forem encontradas sequencias iguais, retornar um false
+  #Procurar por sequências de números iguais no cnpj se forem encontradas 
+  #sequencias iguais, retornar um false
   private function verificarNumerosIguais($cnpj)
   {
-    #Esse loop vai verificar a sequencia de números
-    #no cnpj, se ele encontrar sequencias iguais, 
-    #retornará um erro/false7
+    #Esse loop vai verificar a sequencia de números no cnpj, se ele 
+    #encontrar sequencias iguais, retornará um erro/false
     for ($i = 0; $i <= 14; $i++) 
     {
       if (str_repeat($i, 14) == $cnpj) return false;
     }
+
     return true;
   }
 
@@ -65,16 +58,16 @@ class ValidadorCNPJ
     $primeiro_digito = 0;
     $segundo_digito = 0;
 
-    #Nesse ciclo for, vamos avaliar a variável os primeiros 12
-    #dígitos do CNPJ.A variável $i que inicia em 0, vai de 0 a 11
-    #que é o mesmo de 1 a 12 dígitos, depois então é feito o 
-    #incremento de $i e o decremento de $peso.
-    #depois se o $peso for menor que 2 enquanto for decrescendo,
-    #é retornado o valor 9, senão, é retornado o valor atual do $peso
+    #Nesse ciclo for, vão ser avaliados os primeiros 12 dígitos do CNPJ. A variável $i vai 
+    #ser percorrida de 0 até 11 que é o mesmo que ser percorrida de 1 até 12 no CNPJ, depois 
+    #então é feito o incremento de $i e o decremento de $peso. Se o $peso for menor que 2 
+    #enquanto for decrescendo, é retornado o valor 9, senão, é retornado o valor atual do $peso 
     #que continua decrementando do 9 em diante
     for ($i = 0, $peso = 5; $i <= 11; $i++, $peso--) 
     {
-      #Operação ternária
+      #Operação ternária para fazer comparação entre o resto da divisão e o peso.
+      #Se o resto da divisão for menor que 2, o resultado será 0. Senão, se o resultado
+      #for maior que dois, esse será o resultado
       $peso = ($peso < 2) ? 9 : $peso;
       $primeiro_digito += $cnpj[$i] * $peso;
     }
@@ -85,11 +78,9 @@ class ValidadorCNPJ
       $segundo_digito += $cnpj[$i] * $peso;
     }
 
-    #Abaixo é realizada uma operação ternária para realizar 
-    #a fórmula matemática do cnpj
-    #Começando por pegar o resto da divisão entre primeiro_digito 
-    #e 11, depois se o resto não for menor que 2 ele será 0 
-    #senão, ele será 11 menos o primeiro_digito
+    #Abaixo é realizada uma operação ternária para realizar a fórmula matemática do cnpj
+    #Começando por pegar o resto da divisão entre primeiro_digito e 11, depois se o resto 
+    #não for menor que 2 ele será 0 senão, ele será 11 menos o primeiro_digito
     $calculo_um = (($primeiro_digito % 11) < 2) ? 0 : (11 - ($primeiro_digito % 11));
     $calculo_dois = (($segundo_digito % 11) < 2) ? 0 : (11 - ($segundo_digito % 11));
 

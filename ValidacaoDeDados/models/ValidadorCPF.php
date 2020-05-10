@@ -3,7 +3,7 @@
 class ValidadorCPF
 {
   #Método de validação
-  public function ehValido($cpf)
+  public function ehValido(string $cpf)
   {
     #Se o método ehcpf($cpf) não é um cpf com máscara, retorna um false
     if (!ValidadorCPF::ehCPF($cpf)) return false;
@@ -24,7 +24,7 @@ class ValidadorCPF
   }
 
   #Adicionar máscara de formatação de cpf
-  private function ehCPF($cpf)
+  private function ehCPF(string $cpf): string 
   {
     //123.456.789-10
     $regex_cpf = "/^[0-9]{3}\.[0-9]{3}\.[0-9]{3}\-[0-9]{2}$/";
@@ -32,7 +32,7 @@ class ValidadorCPF
   }
 
   #Retirar a máscara de formatação para verificação de números repetidos sequencialmente
-  private function removeFormatacao($cpf)
+  private function removeFormatacao(string $cpf): int
   {
     $somente_numeros = str_replace([".", "-"], "", $cpf);
     return $somente_numeros;
@@ -40,7 +40,7 @@ class ValidadorCPF
 
   #Procurar por sequências de números iguais no cpf
   #se forem encontradas sequencias iguais, irá retornar um false
-  private function verificarNumerosIguais($cpf)
+  private function verificarNumerosIguais(string $cpf): string
   {
     #Esse loop vai verificar a sequencia de números no cpf, 
     #se ele encontrar sequencias números, retornará um erro/false
@@ -52,7 +52,7 @@ class ValidadorCPF
   }
 
   #Método que faz a validação de digitos do cpf
-  private function validarDigitos($cpf)
+  private function validarDigitos(string $cpf): string 
   {
     $primeiro_digito = 0;
     $segundo_digito = 0;

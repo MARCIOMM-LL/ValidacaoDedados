@@ -5,18 +5,18 @@ require_once "ValidadorCNPJ.php";
 
 class Cliente
 {
-  var $nome;
-  var $cpf_cnpj;
-  var $telefone;
-  var $email;
-  var $cep;
-  var $endereco;
-  var $bairro;
-  var $numero;
-  var $cidade;
-  var $uf;
+  public $nome;
+  public $cpf_cnpj;
+  public $telefone;
+  public $email;
+  public $cep;
+  public $endereco;
+  public $bairro;
+  public $numero;
+  public $cidade;
+  public $uf;
 
-  function __construct($nome, $cpf_cnpj, $telefone, $email, $cep, $endereco, $bairro, $numero, $cidade, $uf) 
+  public function __construct($nome, $cpf_cnpj, $telefone, $email, $cep, $endereco, $bairro, $numero, $cidade, $uf) 
   {
     $validadorCPF = new ValidadorCPF();
     $validadorCNPJ = new ValidadorCNPJ();
@@ -53,7 +53,7 @@ class Cliente
   }
 
   #Validando cep
-  public function cepValido($cep)
+  public function cepValido(string $cep):string 
   {
     if(strlen($cep) == 10)
     {
@@ -67,11 +67,11 @@ class Cliente
   }
 
   #Validando telefone
-  public function telefoneValido($telefone)
+  public function telefoneValido(string $telefone): string
   {
     if(strlen($telefone) == 15)
     {
-      $regex_telefone = "/\([0-9]{2}\)[0-9]{5}\-[0-9]{4}/";
+      $regex_telefone = "/^\([0-9]{2}\)[0-9]{5}\-[0-9]{4}$/";
 
       #O str_replace(" ", "", $telefone) está substituindo o espaço vazio entre
       #o parêntesis e o início do número do telefone por espaço nenhum
@@ -81,7 +81,7 @@ class Cliente
   }
 
   #Validando e-mail
-  public function emailValido($email)
+  public function emailValido(string $email): string
   {
     if(filter_var($email, FILTER_VALIDATE_EMAIL))
     {

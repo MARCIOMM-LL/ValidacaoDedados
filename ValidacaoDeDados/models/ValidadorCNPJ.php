@@ -3,7 +3,7 @@
 class ValidadorCNPJ
 {
   #Método de validação
-  public function ehValido($cnpj)
+  public function ehValido(string $cnpj)
   {
     #Se o método ehcpf($cnpj) não é um cpf com máscara, retorna um false
     if (!ValidadorCNPJ::ehCNPJ($cnpj)) return false;
@@ -23,15 +23,15 @@ class ValidadorCNPJ
   }
 
   #Adicionar máscara de formatação de cnpj
-  private function ehCNPJ($cnpj)
+  private function ehCNPJ(string $cnpj): string 
   {
     //12.345.678/0001-94
-    $regex_cnpj = "/[0-9]{2}\.[0-9]{3}\.[0-9]{3}\/[0-9]{4}\-[0-9]{2}/";
+    $regex_cnpj = "/^[0-9]{2}\.[0-9]{3}\.[0-9]{3}\/[0-9]{4}\-[0-9]{2}$/";
     return preg_match($regex_cnpj, $cnpj);
   }
 
   #Retirar a máscara de formatação para verificação de números repetidos sequencialmente
-  private function removeFormatacao($cnpj)
+  private function removeFormatacao(string $cnpj): int
   {
     $somente_numeros = str_replace([".", "/", "-"], "", $cnpj);
     return $somente_numeros;
@@ -39,7 +39,7 @@ class ValidadorCNPJ
 
   #Procurar por sequências de números iguais no cnpj se forem encontradas 
   #sequencias iguais, retornar um false
-  private function verificarNumerosIguais($cnpj)
+  private function verificarNumerosIguais(string $cnpj): string 
   {
     #Esse loop vai verificar a sequencia de números no cnpj, se ele 
     #encontrar sequencias iguais, retornará um erro/false
@@ -52,9 +52,8 @@ class ValidadorCNPJ
   }
 
   #Método que faz a validação de digitos
-  private function validarDigitos($cnpj)
+  private function validarDigitos(string $cnpj): string 
   {
-
     $primeiro_digito = 0;
     $segundo_digito = 0;
 
@@ -63,11 +62,14 @@ class ValidadorCNPJ
     #então é feito o incremento de $i e o decremento de $peso. Se o $peso for menor que 2 
     #enquanto for decrescendo, é retornado o valor 9, senão, é retornado o valor atual do $peso 
     #que continua decrementando do 9 em diante
+    #Aqui no loop for, a variável $peso começa a decrementar sobre $i de 5 até 2, e depois
+    #continua de 9 até 2 de novo
     for ($i = 0, $peso = 5; $i <= 11; $i++, $peso--) 
     {
       #Operação ternária para fazer comparação entre o resto da divisão e o peso.
       #Se o resto da divisão for menor que 2, o resultado será 0. Senão, se o resultado
       #for maior que dois, esse será o resultado
+      #Aqui na operação ternária é para $peso decrementar de $i de 5 até 2 e, depois 9 até 2 de novo 
       $peso = ($peso < 2) ? 9 : $peso;
       $primeiro_digito += $cnpj[$i] * $peso;
     }

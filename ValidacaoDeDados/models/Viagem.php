@@ -77,7 +77,7 @@ class Viagem
     return true;
   }
  
-  public function precoValido(float $preco): float
+  public function precoValido($preco)
   {
     #O acento circunflexo e o cifrão, estão dizendo antes e 
     #depois do preço não existe nada para além de números 

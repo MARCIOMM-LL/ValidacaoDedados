@@ -41,10 +41,10 @@ class Cliente
     }
 
     $this->nome = $nome;
-    $this->cpf_cnpj = $cpf_cnpj;
-    $this->telefone = $telefone;
+    $this->cpf_cnpj = $this->removeFormatacao($cpf_cnpj);
+    $this->telefone = $this->removeFormatacao($telefone);
     $this->email = $email;
-    $this->cep = $cep;
+    $this->cep = $this->removeFormatacao($cep);
     $this->endereco = $endereco;
     $this->bairro = $bairro;
     $this->numero = $numero;
@@ -88,6 +88,13 @@ class Cliente
       return true;
     }  
       return false;
+  }
+
+  #Retirando a máscara de todos os dados para persistência no banco 
+  public function removeFormatacao($info)
+  {
+    $dado = str_replace([".", "-", "/", "(", ")", " "], "", $info);
+    return $dado;
   }
 
 }

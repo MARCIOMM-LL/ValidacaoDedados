@@ -21,7 +21,7 @@ class Viagem
     if(!$this->dataValida($data_volta)) throw new Exception("Data de ida inválido!");
 
     #Validando o preço
-    if(!$this->precoValido($preço)) throw new Exception("Preço inválido!");
+    #if(!$this->precoValido($preço)) throw new Exception("Preço inválido!");
 
     $this->origem = $origem;
     $this->destino = $destino;
@@ -30,7 +30,7 @@ class Viagem
     $this->classe = $classe;
     $this->adultos = $adultos;
     $this->criancas = $criancas;
-    $this->preco = $preco;
+    $this->preco = $this->convertePreco($preco);
   }
 
   public function dataValida(string $data): string
@@ -70,8 +70,7 @@ class Viagem
     #pelo usuário pela data atual. Se a data passada pelo 
     #usuário for menos que a data atual, é retornado um false
     #O método strtotime(), está convertendo as datas que estáo
-    #em um padrão de string para um padrão de datas com o 
-    #método strtotime()
+    #em um padrão de string para um padrão de datas 
     if(strtotime($data) < strtotime($data_atual)) return false;
 
     return true;
@@ -95,6 +94,26 @@ class Viagem
     #de 2,000.00 
     $regex_preco = "/^[0-9]{1,3} ([.][0-9]{3})* [,] [0-9]{2}$/";
     return preg_match($regex_preco, $preco);
+  }
+
+  #Retirando a máscara de formatação do preço para persistência no banco de dados
+  #Apresentação do valor para o usuário 1.500,35
+  #Persistência do valor no banco precisa ser assim 1500.35 no formato double
+  public function convertePreco($preco)
+  {
+    #Para que o valor de preço seja persistido com os dados brutos, para começar 
+    #é necessário substituir a vírgula por um ponto final no preço, ou seja,
+    #irá ficar assim 1.500.35 Depois é substituido o ponto final por nada e
+    #é usada a função substr() é usada para preservar/retirar os 3 últimos dígitos
+    #para somente procurar por pontos no 1500 e não no .35 Depois é feita a 
+    #concatenação do .35 depois dos 1500 de novo
+    $numero_valido = str_replace(",", ".", $preco);
+    $numero_valido = str_replace(".", "", substr($numero_valido, 0, -3))
+     . substr($numero_valido, -3);
+
+    #O método doubleval($numero_valido) se certifica que o valor da 
+    #da variável passado em seus parâmetros são do tipo float
+    return doubleval($numero_valido);
   }
 
 }

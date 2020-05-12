@@ -1,5 +1,6 @@
 <?php
 
+#Adicionando a máscara de CPF_CNPJ
 function formataCpfCnpj($cpf_cnpj)
 {
 
@@ -22,6 +23,7 @@ function formataCpfCnpj($cpf_cnpj)
   return $formatado;
 }
 
+#Adicionando a máscara de CEP
 function formataCep($cep)
 {
   $formatado = "";
@@ -31,6 +33,7 @@ function formataCep($cep)
   return $formatado;
 }
 
+#Adicionando a máscara de PREÇO
 function formataPreco($preco)
 {
   $formatado = "R$ ";
@@ -42,6 +45,7 @@ function formataPreco($preco)
   return $formatado;
 }
 
+#Adicionando a máscara de DATA
 function formataData($data)
 {
   #A função strtotime() recebe como parâmetro uma string de formato 
@@ -51,6 +55,7 @@ function formataData($data)
   return $formatado;
 }
 
+#Adicionando a máscara de TELEFONE  
 function formataTelefone($telefone)
 {
   $formatado = "";
